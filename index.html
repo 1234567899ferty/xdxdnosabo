@@ -9,7 +9,7 @@
 body{
     margin:0;
     font-family:Arial, Helvetica, sans-serif;
-    background:#1e293b;
+    background:#000;
     color:white;
     text-align:center;
 }
@@ -18,58 +18,74 @@ h1{
     margin-top:30px;
 }
 
+#tiempo{
+    font-size:25px;
+    margin:20px;
+}
+
 #tablero{
-    width:90%;
-    max-width:800px;
+    width:95%;
+    max-width:1200px;
     margin:30px auto;
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
     gap:15px;
 }
 
 .pais{
-    background:#2563eb;
-    border:none;
+    background:white;
+    border:2px solid white;
     border-radius:12px;
-    padding:20px;
-    font-size:22px;
+    padding:18px;
+    font-size:20px;
     cursor:pointer;
+    color:black;
     transition:.2s;
-    color:white;
 }
 
 .pais:hover{
     transform:scale(1.05);
+    background:#ddd;
 }
 
 .descartado{
-    background:#555 !important;
-    color:#ccc;
+    background:#222 !important;
+    color:#aaa;
+    border-color:#777;
     text-decoration:line-through;
     opacity:.5;
 }
 
-button#reiniciar{
+#reiniciar{
     margin:30px;
     padding:15px 35px;
     font-size:18px;
-    border:none;
+    border:2px solid white;
     border-radius:10px;
-    background:#16a34a;
+    background:black;
     color:white;
     cursor:pointer;
 }
 
-button#reiniciar:hover{
-    background:#15803d;
+#reiniciar:hover{
+    background:white;
+    color:black;
 }
+
 </style>
 
 </head>
+
 <body>
 
-<h1>🌍 Adivina el País</h1>
-<p>Haz clic en los países para descartarlos.</p>
+<h1>🌎 ADIVINA EL PAÍS</h1>
+
+<p>Presiona los países para descartarlos</p>
+
+<div id="tiempo">
+Tiempo: 00:00
+</div>
+
 
 <div id="tablero">
 
@@ -78,52 +94,137 @@ button#reiniciar:hover{
 <button class="pais">🇨🇦 Canadá</button>
 <button class="pais">🇧🇷 Brasil</button>
 <button class="pais">🇦🇷 Argentina</button>
-<button class="pais">🇪🇸 España</button>
-<button class="pais">🇫🇷 Francia</button>
-<button class="pais">🇯🇵 Japón</button>
 <button class="pais">🇨🇴 Colombia</button>
-<button class="pais">🇲🇦 Marruecos</button>
-
 <button class="pais">🇻🇪 Venezuela</button>
-<button class="pais">🇰🇵 Corea del Norte</button>
-<button class="pais">🇵🇹 Portugal</button>
-<button class="pais">🇮🇱 Israel</button>
-<button class="pais">🇮🇷 Irán</button>
-<button class="pais">🇳🇱 Países Bajos</button>
 <button class="pais">🇺🇾 Uruguay</button>
 <button class="pais">🇬🇹 Guatemala</button>
 <button class="pais">🇸🇻 El Salvador</button>
-<button class="pais">🇨🇺 Cuba</button>
 
-<button class="pais">🇩🇪 Alemania</button>
-<button class="pais">🇮🇹 Italia</button>
-<button class="pais">🇬🇧 Reino Unido</button>
+<button class="pais">🇨🇺 Cuba</button>
+<button class="pais">🇯🇵 Japón</button>
 <button class="pais">🇨🇳 China</button>
+<button class="pais">🇰🇷 Corea del Sur</button>
+<button class="pais">🇰🇵 Corea del Norte</button>
 <button class="pais">🇮🇳 India</button>
 <button class="pais">🇦🇺 Australia</button>
-<button class="pais">🇿🇦 Sudáfrica</button>
+<button class="pais">🇮🇩 Indonesia</button>
+<button class="pais">🇹🇭 Tailandia</button>
+<button class="pais">🇵🇭 Filipinas</button>
+
+<button class="pais">🇪🇸 España</button>
+<button class="pais">🇫🇷 Francia</button>
+<button class="pais">🇩🇪 Alemania</button>
+<button class="pais">🇮🇹 Italia</button>
+<button class="pais">🇵🇹 Portugal</button>
+<button class="pais">🇬🇧 Reino Unido</button>
+<button class="pais">🇳🇱 Países Bajos</button>
+<button class="pais">🇧🇪 Bélgica</button>
+<button class="pais">🇨🇭 Suiza</button>
+<button class="pais">🇸🇪 Suecia</button>
+
+<button class="pais">🇳🇴 Noruega</button>
+<button class="pais">🇫🇮 Finlandia</button>
+<button class="pais">🇵🇱 Polonia</button>
 <button class="pais">🇹🇷 Turquía</button>
-<button class="pais">🇰🇷 Corea del Sur</button>
+<button class="pais">🇬🇷 Grecia</button>
+<button class="pais">🇷🇺 Rusia</button>
+<button class="pais">🇺🇦 Ucrania</button>
+<button class="pais">🇮🇱 Israel</button>
+<button class="pais">🇮🇷 Irán</button>
+<button class="pais">🇸🇦 Arabia Saudita</button>
+
 <button class="pais">🇪🇬 Egipto</button>
+<button class="pais">🇿🇦 Sudáfrica</button>
+<button class="pais">🇲🇦 Marruecos</button>
+<button class="pais">🇳🇬 Nigeria</button>
+<button class="pais">🇰🇪 Kenia</button>
+<button class="pais">🇦🇪 Emiratos Árabes Unidos</button>
+<button class="pais">🇮🇶 Irak</button>
+<button class="pais">🇶🇦 Catar</button>
+<button class="pais">🇵🇰 Pakistán</button>
+<button class="pais">🇧🇩 Bangladés</button>
+
+<button class="pais">🇳🇿 Nueva Zelanda</button>
+<button class="pais">🇨🇱 Chile</button>
+<button class="pais">🇵🇪 Perú</button>
+<button class="pais">🇧🇴 Bolivia</button>
+<button class="pais">🇵🇾 Paraguay</button>
+<button class="pais">🇪🇨 Ecuador</button>
+<button class="pais">🇨🇷 Costa Rica</button>
+<button class="pais">🇵🇦 Panamá</button>
+<button class="pais">🇩🇴 República Dominicana</button>
+<button class="pais">🇯🇲 Jamaica</button>
 
 </div>
 
+
 <button id="reiniciar">🔄 Reiniciar partida</button>
 
+
 <script>
+
 const paises = document.querySelectorAll(".pais");
 
+let segundos = 0;
+let minutos = 0;
+let reloj;
+let iniciado = false;
+
+
+// Clic en países
 paises.forEach(pais=>{
+
     pais.addEventListener("click",()=>{
+
         pais.classList.toggle("descartado");
+
+
+        if(!iniciado){
+
+            iniciado = true;
+
+            reloj = setInterval(()=>{
+
+                segundos++;
+
+                if(segundos === 60){
+                    segundos = 0;
+                    minutos++;
+                }
+
+                let m = minutos < 10 ? "0"+minutos : minutos;
+                let s = segundos < 10 ? "0"+segundos : segundos;
+
+                document.getElementById("tiempo").innerHTML =
+                "Tiempo: " + m + ":" + s;
+
+            },1000);
+
+        }
+
     });
+
 });
 
+
+// Reiniciar
 document.getElementById("reiniciar").addEventListener("click",()=>{
+
     paises.forEach(pais=>{
         pais.classList.remove("descartado");
     });
+
+    clearInterval(reloj);
+
+    segundos = 0;
+    minutos = 0;
+    iniciado = false;
+
+    document.getElementById("tiempo").innerHTML =
+    "Tiempo: 00:00";
+
 });
+
 </script>
 
 </body>
