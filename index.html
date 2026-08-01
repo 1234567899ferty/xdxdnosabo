@@ -82,7 +82,27 @@ font-size:20px;
 
 }
 
+#paisElegido{
 
+font-size:30px;
+
+font-weight:bold;
+
+margin:25px auto;
+
+padding:25px;
+
+width:80%;
+
+max-width:500px;
+
+border:3px solid white;
+
+border-radius:15px;
+
+background:#111;
+
+}
 
 #tablero{
 
@@ -217,22 +237,33 @@ font-size:16px;
 
 <p>Descarta países hasta encontrar el correcto</p>
 
+<button id="paisAleatorio">🎲 País aleatorio</button>
 
+<button id="elegirManual">✍️ Elegir manualmente</button>
+<div id="ventanaPais" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,.8);">
 
-<button id="modoJugador">
+<div style="background:white; color:black; width:90%; max-width:400px; margin:100px auto; padding:20px; border-radius:15px;">
 
-🎮 Modo Un Jugador
+<h2>Elegir país secreto</h2>
 
-</button>
+<select id="listaPaises" style="width:100%; padding:10px; font-size:18px;">
 
+</select>
 
+<br><br>
 
-<button id="reiniciar">
+<button onclick="seleccionarPais()">Seleccionar</button>
 
-🔄 Reiniciar
+<button onclick="cerrarVentana()">Cancelar</button>
 
-</button>
+</div>
 
+</div>
+<button id="modoJugador">🎮 Modo Un Jugador</button>
+
+<button id="reiniciar">🔄 Reiniciar</button>
+
+<div id="paisElegido">País elegido: Ninguno</div>
 
 
 <h2 id="mensaje">
@@ -332,6 +363,57 @@ let paisSecreto = "";
 
 let modoJugador = false;
 
+// =======================
+// PAÍS ALEATORIO
+// =======================
+// PAÍS ALEATORIO
+// =======================
+
+document.getElementById("paisAleatorio").addEventListener("click",()=>{
+
+    let numero = Math.floor(Math.random()*paises.length);
+
+    paisSecreto = paises[numero].innerText;
+
+
+    document.getElementById("paisElegido").innerHTML =
+    "🌎 País seleccionado:<br><br>" + paisSecreto;
+
+});
+
+// =======================
+// ELEGIR MANUALMENTE
+// =======================
+
+document.getElementById("elegirManual").addEventListener("click",()=>{
+
+    let lista = "";
+
+    paises.forEach((pais,i)=>{
+
+        lista += (i+1) + ". " + pais.innerText + "\n";
+
+    });
+
+    let opcion = prompt(
+        "Escribe el número del país:\n\n" + lista
+    );
+
+    opcion = parseInt(opcion);
+
+    if(opcion>=1 && opcion<=paises.length){
+
+        paisSecreto = paises[opcion-1].innerText;
+
+        alert("✅ Tu país es:\n\n" + paisSecreto);
+
+    }else{
+
+        alert("Número inválido.");
+
+    }
+
+});
 
 let segundos = 0;
 let minutos = 0;
@@ -549,18 +631,83 @@ reloj=null;
 
 iniciado=false;
 
+paisSecreto = "";
 
-mensaje.innerHTML=
 
-"🔄 Nueva partida";
+document.getElementById("paisElegido").innerHTML =
+"🌎 País seleccionado: Ninguno";
 
+
+document.getElementById("ventanaPais").style.display =
+"none";
+
+
+modoJugador = false;
+
+
+mensaje.innerHTML = "";
+
+
+clearInterval(reloj);
+
+reloj = null;
+
+segundos = 0;
+
+minutos = 0;
+
+iniciado = false;
+
+
+document.getElementById("tiempo").innerHTML =
+"Tiempo: 00:00";
+});
+
+// Abrir ventana
+document.getElementById("elegirManual").addEventListener("click",()=>{
+
+const lista=document.getElementById("listaPaises");
+
+lista.innerHTML="";
+
+paises.forEach(pais=>{
+
+let opcion=document.createElement("option");
+
+opcion.value=pais.innerText;
+
+opcion.textContent=pais.innerText;
+
+lista.appendChild(opcion);
+
+});
+
+document.getElementById("ventanaPais").style.display="block";
 
 });
 
 
+// Seleccionar país
+
+function seleccionarPais(){
+
+paisSecreto=document.getElementById("listaPaises").value;
+
+document.getElementById("paisElegido").innerHTML=
+"🌎 País elegido:<br><br>"+paisSecreto;
+
+document.getElementById("ventanaPais").style.display="none";
+
+}
+
+
+// Cerrar ventana
+
+function cerrarVentana(){
+
+document.getElementById("ventanaPais").style.display="none";
+
+}
 
 </script>
 </body>
-
-</html>
-
