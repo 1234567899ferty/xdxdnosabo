@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adivina el País</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#1e293b;
+    color:white;
+    text-align:center;
+}
+
+h1{
+    margin-top:30px;
+}
+
+#tablero{
+    width:90%;
+    max-width:800px;
+    margin:30px auto;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:15px;
+}
+
+.pais{
+    background:#2563eb;
+    border:none;
+    border-radius:12px;
+    padding:20px;
+    font-size:22px;
+    cursor:pointer;
+    transition:.2s;
+    color:white;
+}
+
+.pais:hover{
+    transform:scale(1.05);
+}
+
+.descartado{
+    background:#555 !important;
+    color:#ccc;
+    text-decoration:line-through;
+    opacity:.5;
+}
+
+button#reiniciar{
+    margin:30px;
+    padding:15px 35px;
+    font-size:18px;
+    border:none;
+    border-radius:10px;
+    background:#16a34a;
+    color:white;
+    cursor:pointer;
+}
+
+button#reiniciar:hover{
+    background:#15803d;
+}
+</style>
+
+</head>
+<body>
+
+<h1>🌍 Adivina el País</h1>
+<p>Haz clic en los países para descartarlos.</p>
+
+<div id="tablero">
+
+<button class="pais">🇲🇽 México</button>
+<button class="pais">🇺🇸 Estados Unidos</button>
+<button class="pais">🇨🇦 Canadá</button>
+<button class="pais">🇧🇷 Brasil</button>
+<button class="pais">🇦🇷 Argentina</button>
+<button class="pais">🇪🇸 España</button>
+<button class="pais">🇫🇷 Francia</button>
+<button class="pais">🇯🇵 Japón</button>
+<button class="pais">🇨🇳 China</button>
+<button class="pais">🇦🇺 Australia</button>
+
+</div>
+
+<button id="reiniciar">🔄 Reiniciar partida</button>
+
+<script>
+const paises = document.querySelectorAll(".pais");
+
+paises.forEach(pais=>{
+    pais.addEventListener("click",()=>{
+        pais.classList.toggle("descartado");
+    });
+});
+
+document.getElementById("reiniciar").addEventListener("click",()=>{
+    paises.forEach(pais=>{
+        pais.classList.remove("descartado");
+    });
+});
+</script>
+
+</body>
+</html>
