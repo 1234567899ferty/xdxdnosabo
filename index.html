@@ -2,289 +2,193 @@
 <html lang="es">
 
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Adivina el País</title>
-
+<title>Adivina el País v2.2</title>
 
 <style>
-
 body{
-
 margin:0;
 padding:0;
-
 background:#000;
 color:white;
-
 font-family:Arial, Helvetica, sans-serif;
-
 text-align:center;
-
 }
-
 
 h1{
-
 font-size:clamp(30px,5vw,45px);
-
+margin-bottom: 5px;
 }
-
-
 
 button{
-
-padding:15px 25px;
-
-margin:10px;
-
-font-size:18px;
-
+padding:12px 20px;
+margin:8px;
+font-size:16px;
 border-radius:10px;
-
 border:2px solid white;
-
 background:black;
-
 color:white;
-
 cursor:pointer;
-
+transition:.2s;
 }
-
-
 
 button:hover{
-
 background:white;
-
 color:black;
-
 }
 
+#panelEstadisticas{
+background: #111;
+border: 2px solid #333;
+border-radius: 12px;
+width: 90%;
+max-width: 750px;
+margin: 15px auto;
+padding: 12px;
+display: flex;
+justify-content: space-around;
+flex-wrap: wrap;
+font-size: 15px;
+}
 
+.stat-item{
+margin: 5px 10px;
+}
+
+.stat-value{
+font-weight: bold;
+color: #4CAF50;
+}
 
 #tiempo{
-
 font-size:25px;
-
-margin:20px;
-
+margin:10px;
 }
 
-
-
 #mensaje{
-
 font-size:20px;
-
 }
 
 #paisElegido{
-
-font-size:30px;
-
+font-size:26px;
 font-weight:bold;
-
-margin:25px auto;
-
-padding:25px;
-
+margin:20px auto;
+padding:20px;
 width:80%;
-
 max-width:500px;
-
 border:3px solid white;
-
 border-radius:15px;
-
 background:#111;
-
 }
 
 #tablero{
-
-
 width:95%;
-
 max-width:1200px;
-
 margin:30px auto;
-
-
 display:grid;
-
 grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
-
 gap:12px;
-
-
 }
-
-
 
 .pais{
-
-
 background:white;
-
 color:black;
-
-
 border:2px solid white;
-
 border-radius:12px;
-
-
 padding:18px;
-
-
 font-size:20px;
-
-
 cursor:pointer;
-
-
 transition:.2s;
-
-
 }
-
-
 
 .pais:hover{
-
 transform:scale(1.05);
-
 }
-
-
 
 .brillo{
-
 animation:brillar .4s;
-
 }
-
-
 
 @keyframes brillar{
-
-
-50%{
-
+50{
 box-shadow:0 0 40px white;
-
 }
-
-
 }
-
-
 
 .descartado{
-
-
 background:#222 !important;
-
 color:#888;
-
-
 text-decoration:line-through;
-
-
 opacity:.5;
-
-
 }
-
-
 
 @media(max-width:600px){
-
-
 #tablero{
-
 grid-template-columns:repeat(2,1fr);
-
 }
-
-
 .pais{
-
 font-size:16px;
-
 }
-
-
 }
-
-
 </style>
-
-
 </head>
-
-
 
 <body>
 
-
-<h1>🌎 Adivina el País</h1>
-
-
+<h1>🌎 Adivina el País <span style="font-size: 18px; color: #888;">v2.2</span></h1>
 <p>Descarta países hasta encontrar el correcto</p>
 
-<button id="paisAleatorio">🎲 País aleatorio</button>
-
-<button id="elegirManual">✍️ Elegir manualmente</button>
-<div id="ventanaPais" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,.8);">
-
-<div style="background:white; color:black; width:90%; max-width:400px; margin:100px auto; padding:20px; border-radius:15px;">
-
-<h2>Elegir país secreto</h2>
-
-<select id="listaPaises" style="width:100%; padding:10px; font-size:18px;">
-
-</select>
-
-<br><br>
-
-<button onclick="seleccionarPais()">Seleccionar</button>
-
-<button onclick="cerrarVentana()">Cancelar</button>
-
+<!-- Panel de Estadísticas y Récords -->
+<div id="panelEstadisticas">
+    <div class="stat-item">🎮 Partidas: <span id="statPartidas" class="stat-value">0</span></div>
+    <div class="stat-item">🏆 Victorias: <span id="statVictorias" class="stat-value">0</span></div>
+    <div class="stat-item">❌ Derrotas: <span id="statDerrotas" class="stat-value" style="color:#ff4444;">0</span></div>
+    <div class="stat-item">🔥 Racha: <span id="statRacha" class="stat-value">0</span></div>
+    <div class="stat-item">👑 Mejor Racha: <span id="statMejorRacha" class="stat-value">0</span></div>
+    <div class="stat-item">⚡ Mejor Tiempo: <span id="statMejorTiempo" class="stat-value">--:--</span></div>
 </div>
 
+<div id="vidasContainer" style="font-size: 20px; margin: 10px; display: none;">
+    Vidas: <span id="contadorVidas" style="color: #ff4444; font-weight: bold;">❤️❤️❤️</span>
 </div>
-<button id="modoJugador">🎮 Modo Un Jugador</button>
 
-<button id="reiniciar">🔄 Reiniciar</button>
+<div>
+    <button id="paisAleatorio">🎲 País aleatorio</button>
+    <button id="elegirManual">✍️ Elegir manualmente</button>
+    <button id="retoDiario">📅 Reto Diario</button>
+    <button id="modoJugador">🎮 Modo Un Jugador</button>
+    <button id="darPista">💡 Pista</button>
+    <button id="reiniciar">🔄 Reiniciar</button>
+</div>
+
+<!-- Ventana modal para selección manual -->
+<div id="ventanaPais" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,.8); z-index:1000;">
+    <div style="background:white; color:black; width:90%; max-width:400px; margin:100px auto; padding:20px; border-radius:15px;">
+        <h2>Elegir país secreto</h2>
+        <select id="listaPaises" style="width:100%; padding:10px; font-size:18px;"></select>
+        <br><br>
+        <button onclick="seleccionarPais()">Seleccionar</button>
+        <button onclick="cerrarVentana()">Cancelar</button>
+    </div>
+</div>
+
+<!-- Pantalla de Resultado (Modal Final) -->
+<div id="modalResultado" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:2000; text-align:center;">
+    <div style="background:#111; border:3px solid white; color:white; width:90%; max-width:400px; margin:150px auto; padding:30px; border-radius:15px;">
+        <h2 id="tituloResultado" style="font-size:28px; margin-top:0;">¡Resultado!</h2>
+        <p id="textoResultado" style="font-size:18px; margin:20px 0;"></p>
+        <button onclick="cerrarModalResultado()" style="padding:10px 20px; font-size:18px; background:white; color:black; font-weight:bold; border-radius:8px; cursor:pointer;">Aceptar</button>
+    </div>
+</div>
 
 <div id="paisElegido">País elegido: Ninguno</div>
 
+<h2 id="mensaje">Modo libre</h2>
 
-<h2 id="mensaje">
-
-Modo libre
-
-</h2>
-
-
-
-<div id="tiempo">
-
-Tiempo: 00:00
-
-</div>
-
-
+<div id="tiempo">Tiempo: 00:00</div>
 
 <div id="tablero">
-
-
 <button class="pais">🇲🇽 México</button>
 <button class="pais">🇺🇸 Estados Unidos</button>
 <button class="pais">🇨🇦 Canadá</button>
@@ -326,7 +230,6 @@ Tiempo: 00:00
 <button class="pais">🇧🇪 Bélgica</button>
 <button class="pais">🇨🇭 Suiza</button>
 <button class="pais">🇸🇪 Suecia</button>
-
 <button class="pais">🇳🇴 Noruega</button>
 <button class="pais">🇫🇮 Finlandia</button>
 <button class="pais">🇵🇱 Polonia</button>
@@ -348,7 +251,6 @@ Tiempo: 00:00
 <button class="pais">🇶🇦 Catar</button>
 <button class="pais">🇦🇺 Australia</button>
 <button class="pais">🇳🇿 Nueva Zelanda</button>
-
 <button class="pais">🇦🇫 Afganistán</button>
 <button class="pais">🇦🇱 Albania</button>
 <button class="pais">🇩🇿 Argelia</button>
@@ -359,7 +261,6 @@ Tiempo: 00:00
 <button class="pais">🇦🇹 Austria</button>
 <button class="pais">🇦🇿 Azerbaiyán</button>
 <button class="pais">🇧🇸 Bahamas</button>
-
 <button class="pais">🇧🇭 Baréin</button>
 <button class="pais">🇧🇧 Barbados</button>
 <button class="pais">🇧🇾 Bielorrusia</button>
@@ -370,7 +271,6 @@ Tiempo: 00:00
 <button class="pais">🇧🇦 Bosnia y Herzegovina</button>
 <button class="pais">🇧🇼 Botsuana</button>
 <button class="pais">🇧🇳 Brunéi</button>
-
 <button class="pais">🇧🇫 Burkina Faso</button>
 <button class="pais">🇧🇮 Burundi</button>
 <button class="pais">🇨🇻 Cabo Verde</button>
@@ -386,9 +286,8 @@ Tiempo: 00:00
 <button class="pais">🇨🇿 Chequia</button>
 <button class="pais">🇩🇰 Dinamarca</button>
 <button class="pais">🇩🇯 Yibuti</button>
-
 <button class="pais">⛰️ Cuaxomulco XD</button>
- <button class="pais">🇪🇷 Eritrea</button>
+<button class="pais">🇪🇷 Eritrea</button>
 <button class="pais">🇪🇪 Estonia</button>
 <button class="pais">🇸🇿 Esuatini</button>
 <button class="pais">🇪🇹 Etiopía</button>
@@ -398,7 +297,6 @@ Tiempo: 00:00
 <button class="pais">🇬🇪 Georgia</button>
 <button class="pais">🇬🇭 Ghana</button>
 <button class="pais">🇬🇩 Granada</button>
-
 <button class="pais">🇬🇳 Guinea</button>
 <button class="pais">🇬🇼 Guinea-Bisáu</button>
 <button class="pais">🇬🇾 Guyana</button>
@@ -409,7 +307,6 @@ Tiempo: 00:00
 <button class="pais">🇮🇪 Irlanda</button>
 <button class="pais">🇯🇴 Jordania</button>
 <button class="pais">🇰🇿 Kazajistán</button>
-
 <button class="pais">🇰🇮 Kiribati</button>
 <button class="pais">🇰🇼 Kuwait</button>
 <button class="pais">🇰🇬 Kirguistán</button>
@@ -420,13 +317,11 @@ Tiempo: 00:00
 <button class="pais">🇱🇷 Liberia</button>
 <button class="pais">🇱🇾 Libia</button>
 <button class="pais">🇱🇮 Liechtenstein</button>
-
 <button class="pais">🇱🇹 Lituania</button>
 <button class="pais">🇱🇺 Luxemburgo</button>
 <button class="pais">🇲🇬 Madagascar</button>
 <button class="pais">🇲🇼 Malaui</button>
-<button class="pais">🇲🇾 Malasia</button>   
-
+<button class="pais">🇲🇾 Malasia</button>    
 <button class="pais">🇲🇻 Maldivas</button>
 <button class="pais">🇲🇱 Malí</button>
 <button class="pais">🇲🇹 Malta</button>
@@ -437,7 +332,6 @@ Tiempo: 00:00
 <button class="pais">🇲🇩 Moldavia</button>
 <button class="pais">🇲🇨 Mónaco</button>
 <button class="pais">🇲🇳 Mongolia</button>
-
 <button class="pais">🇲🇪 Montenegro</button>
 <button class="pais">🇲🇿 Mozambique</button>
 <button class="pais">🇲🇲 Myanmar</button>
@@ -448,7 +342,6 @@ Tiempo: 00:00
 <button class="pais">🇳🇪 Níger</button>
 <button class="pais">🇲🇰 Macedonia del Norte</button>
 <button class="pais">🇴🇲 Omán</button>
-
 <button class="pais">🇵🇼 Palaos</button>
 <button class="pais">🇵🇾 Paraguay</button>
 <button class="pais">🇵🇬 Papúa Nueva Guinea</button>
@@ -459,13 +352,11 @@ Tiempo: 00:00
 <button class="pais">🇼🇸 Samoa</button>
 <button class="pais">🇸🇲 San Marino</button>
 <button class="pais">🇸🇹 Santo Tomé y Príncipe</button>
-
 <button class="pais">🇸🇳 Senegal</button>
 <button class="pais">🇷🇸 Serbia</button>
 <button class="pais">🇸🇨 Seychelles</button>
 <button class="pais">🇸🇱 Sierra Leona</button>
 <button class="pais">🇸🇬 Singapur</button>    
-
 <button class="pais">🇸🇰 Eslovaquia</button>
 <button class="pais">🇸🇮 Eslovenia</button>
 <button class="pais">🇸🇧 Islas Salomón</button>
@@ -476,7 +367,6 @@ Tiempo: 00:00
 <button class="pais">🇸🇷 Surinam</button>
 <button class="pais">🇸🇾 Siria</button>
 <button class="pais">🇹🇯 Tayikistán</button>
-
 <button class="pais">🇹🇿 Tanzania</button>
 <button class="pais">🇹🇱 Timor Oriental</button>
 <button class="pais">🇹🇬 Togo</button>
@@ -487,378 +377,429 @@ Tiempo: 00:00
 <button class="pais">🇹🇻 Tuvalu</button>
 <button class="pais">🇺🇬 Uganda</button>
 <button class="pais">🇺🇿 Uzbekistán</button>
-
 <button class="pais">🇻🇺 Vanuatu</button>
 <button class="pais">🇻🇦 Ciudad del Vaticano</button>
 <button class="pais">🇻🇳 Vietnam</button>
 <button class="pais">🇾🇪 Yemen</button>
 <button class="pais">🇿🇲 Zambia</button>
 <button class="pais">🇿🇼 Zimbabue</button>
-
-
 <button class="pais">🇩🇲 Dominica</button>
 <button class="pais">🇬🇶 Guinea Ecuatorial</button>
-
 <button class="pais">☀️ Sol</button>
 <button class="pais">🔴 Marte</button>
 </div>
 
-
 <script>
-
 const paises = document.querySelectorAll(".pais");
-
 const mensaje = document.getElementById("mensaje");
 
 let paisSecreto = "";
-
 let modoJugador = false;
-
-// =======================
-// PAÍS ALEATORIO
-// =======================
-// PAÍS ALEATORIO
-// =======================
-
-document.getElementById("paisAleatorio").addEventListener("click",()=>{
-
-    let numero = Math.floor(Math.random()*paises.length);
-
-    paisSecreto = paises[numero].innerText;
-
-
-    document.getElementById("paisElegido").innerHTML =
-    "🌎 País seleccionado:<br><br>" + paisSecreto;
-
-});
-
-// =======================
-// ELEGIR MANUALMENTE
-// =======================
-
-document.getElementById("elegirManual").addEventListener("click",()=>{
-
-    let lista = "";
-
-    paises.forEach((pais,i)=>{
-
-        lista += (i+1) + ". " + pais.innerText + "\n";
-
-    });
-
-    let opcion = prompt(
-        "Escribe el número del país:\n\n" + lista
-    );
-
-    opcion = parseInt(opcion);
-
-    if(opcion>=1 && opcion<=paises.length){
-
-        paisSecreto = paises[opcion-1].innerText;
-
-        alert("✅ Tu país es:\n\n" + paisSecreto);
-
-    }else{
-
-        alert("Número inválido.");
-
-    }
-
-});
-
+let esRetoDiario = false;
 let segundos = 0;
 let minutos = 0;
-
 let reloj = null;
 let iniciado = false;
+let juegoTerminado = false;
+let vidas = 3;
+let pistaUsada = false;
 
+// =======================
+// EFECTOS DE SONIDO (Web Audio API)
+// =======================
+let audioCtx = null;
 
+function initAudio() {
+    if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+}
 
-// Activar modo un jugador
+function playSound(type) {
+    try {
+        initAudio();
+        if (!audioCtx) return;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        const now = audioCtx.currentTime;
 
-document.getElementById("modoJugador").addEventListener("click",()=>{
+        if (type === 'click') {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(400, now);
+            osc.frequency.exponentialRampToValueAtTime(200, now + 0.05);
+            gain.gain.setValueAtTime(0.08, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+            osc.start(now);
+            osc.stop(now + 0.05);
+        } else if (type === 'error') {
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(150, now);
+            osc.frequency.linearRampToValueAtTime(80, now + 0.2);
+            gain.gain.setValueAtTime(0.12, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+            osc.start(now);
+            osc.stop(now + 0.2);
+        } else if (type === 'win') {
+            const notes = [523.25, 659.25, 783.99, 1046.50];
+            notes.forEach((freq, idx) => {
+                const o = audioCtx.createOscillator();
+                const g = audioCtx.createGain();
+                o.connect(g);
+                g.connect(audioCtx.destination);
+                o.frequency.setValueAtTime(freq, now + idx * 0.08);
+                g.gain.setValueAtTime(0.1, now + idx * 0.08);
+                g.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.08 + 0.2);
+                o.start(now + idx * 0.08);
+                o.stop(now + idx * 0.08 + 0.2);
+            });
+        } else if (type === 'hint') {
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(600, now);
+            osc.frequency.exponentialRampToValueAtTime(900, now + 0.15);
+            gain.gain.setValueAtTime(0.1, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+            osc.start(now);
+            osc.stop(now + 0.15);
+        }
+    } catch(e) {}
+}
 
+// =======================
+// ESTADÍSTICAS & LOCALSTORAGE
+// =======================
+let stats = JSON.parse(localStorage.getItem("adivinaPaisStats_v22")) || {
+    partidas: 0,
+    victorias: 0,
+    derrotas: 0,
+    racha: 0,
+    mejorRacha: 0,
+    mejorTiempo: null
+};
 
-modoJugador = true;
+function actualizarUIStats() {
+    document.getElementById("statPartidas").innerText = stats.partidas;
+    document.getElementById("statVictorias").innerText = stats.victorias;
+    document.getElementById("statDerrotas").innerText = stats.derrotas;
+    document.getElementById("statRacha").innerText = stats.racha;
+    document.getElementById("statMejorRacha").innerText = stats.mejorRacha;
+    
+    if (stats.mejorTiempo !== null) {
+        let m = Math.floor(stats.mejorTiempo / 60);
+        let s = stats.mejorTiempo % 60;
+        document.getElementById("statMejorTiempo").innerText = (m < 10 ? "0"+m : m) + ":" + (s < 10 ? "0"+s : s);
+    } else {
+        document.getElementById("statMejorTiempo").innerText = "--:--";
+    }
+}
+actualizarUIStats();
 
+function guardarStats() {
+    localStorage.setItem("adivinaPaisStats_v22", JSON.stringify(stats));
+    actualizarUIStats();
+}
 
-let numero = Math.floor(Math.random()*paises.length);
+function actualizarVidasUI() {
+    let corazones = "";
+    for (let i = 0; i < 3; i++) {
+        corazones += i < vidas ? "❤️" : "❌";
+    }
+    document.getElementById("contadorVidas").innerText = corazones;
+}
 
+// =======================
+// FECHA LOCAL DE MÉXICO (YYYY-MM-DD)
+// =======================
+function getFechaMexico() {
+    return new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'America/Mexico_City',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+    }).format(new Date());
+}
 
-paisSecreto = paises[numero].innerText;
-
-
-
-mensaje.innerHTML = "🤫 Hay un país secreto. ¡Adivínalo!";
-
-
-iniciarTiempo();
-
-
+// =======================
+// PAÍS ALEATORIO
+// =======================
+document.getElementById("paisAleatorio").addEventListener("click", () => {
+    playSound('click');
+    let numero = Math.floor(Math.random() * paises.length);
+    paisSecreto = paises[numero].innerText;
+    document.getElementById("paisElegido").innerHTML = "🌎 País seleccionado:<br><br>" + paisSecreto;
+    modoJugador = false;
+    pistaUsada = false;
+    document.getElementById("vidasContainer").style.display = "none";
 });
 
-
-paises.forEach(pais=>{
-
-pais.addEventListener("click",()=>{
-
-
-if(!modoJugador){
-
-pais.classList.toggle("descartado");
-return;
-
-}
-
-
-if(pais.innerText === paisSecreto){
-
-mensaje.innerHTML =
-"🎉 ¡Correcto! Era " + paisSecreto;
-
-clearInterval(reloj);
-
-
-}else{
-
-
-pais.classList.add("descartado");
-
-mensaje.innerHTML =
-"❌ No es ese país, sigue buscando";
-
-
-}
-
-
-
-pais.classList.add("brillo");
-
-
-setTimeout(()=>{
-
-pais.classList.remove("brillo");
-
-},400);
-
-
-
-if(!iniciado){
-
-iniciarTiempo();
-
-}
-
-
+// =======================
+// ELEGIR MANUALMENTE (MODAL)
+// =======================
+document.getElementById("elegirManual").addEventListener("click", () => {
+    playSound('click');
+    const lista = document.getElementById("listaPaises");
+    lista.innerHTML = "";
+    paises.forEach(pais => {
+        let opcion = document.createElement("option");
+        opcion.value = pais.innerText;
+        opcion.textContent = pais.innerText;
+        lista.appendChild(opcion);
+    });
+    document.getElementById("ventanaPais").style.display = "block";
 });
 
+function seleccionarPais() {
+    playSound('click');
+    paisSecreto = document.getElementById("listaPaises").value;
+    document.getElementById("paisElegido").innerHTML = "🌎 País elegido:<br><br>" + paisSecreto;
+    document.getElementById("ventanaPais").style.display = "none";
+    modoJugador = false;
+    pistaUsada = false;
+    document.getElementById("vidasContainer").style.display = "none";
+}
 
+function cerrarVentana() {
+    playSound('click');
+    document.getElementById("ventanaPais").style.display = "none";
+}
+
+// =======================
+// MODO RETO DIARIO
+// =======================
+document.getElementById("retoDiario").addEventListener("click", () => {
+    playSound('click');
+    const hoy = getFechaMexico();
+    const completadoKey = "retoDiario_completado_" + hoy;
+
+    if (localStorage.getItem(completadoKey)) {
+        mostrarModal("📅 Reto Diario Completado", "Ya jugaste el Reto Diario de hoy (" + hoy + "). ¡Vuelve mañana para un nuevo desafío!");
+        return;
+    }
+
+    esRetoDiario = true;
+    modoJugador = true;
+    juegoTerminado = false;
+    vidas = 3;
+    pistaUsada = false;
+    actualizarVidasUI();
+    document.getElementById("vidasContainer").style.display = "block";
+    
+    let hash = 0;
+    for (let i = 0; i < hoy.length; i++) {
+        hash = hoy.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    let index = Math.abs(hash) % paises.length;
+    paisSecreto = paises[index].innerText;
+
+    mensaje.innerHTML = "📅 Reto Diario (" + hoy + "). ¡Adivínalo!";
+    document.getElementById("paisElegido").innerHTML = "🌎 Reto Diario Activo";
+    
+    reiniciarRelojBase();
+    iniciarTiempo();
 });
 
-// Temporizador
-
-function iniciarTiempo(){
-
-
-if(iniciado) return;
-
-
-iniciado = true;
-
-
-reloj = setInterval(()=>{
-
-
-segundos++;
-
-
-if(segundos==60){
-
-segundos=0;
-
-minutos++;
-
-}
-
-
-
-let m = minutos < 10 ? "0"+minutos : minutos;
-
-let s = segundos < 10 ? "0"+segundos : segundos;
-
-
-
-document.getElementById("tiempo").innerHTML =
-
-"Tiempo: "+m+":"+s;
-
-
-
-},1000);
-
-
-
-}
-
-
-
-
-
-
-// Comprobar respuesta
-
-function comprobar(){
-
-
-let respuesta = prompt("¿Cuál crees que es el país?");
-
-
-
-if(respuesta == paisSecreto){
-
-
-mensaje.innerHTML =
-
-"🎉 Correcto. Era "+paisSecreto;
-
-
-}else{
-
-
-mensaje.innerHTML =
-
-"❌ Incorrecto. Sigue intentando";
-
-
-}
-
-
-
-}
-
-
-
-
-// Reiniciar juego
-
-document.getElementById("reiniciar").addEventListener("click",()=>{
-
-
-paises.forEach(pais=>{
-
-
-pais.classList.remove("descartado");
-
-pais.classList.remove("brillo");
-
-
+// =======================
+// MODO UN JUGADOR
+// =======================
+document.getElementById("modoJugador").addEventListener("click", () => {
+    playSound('click');
+    esRetoDiario = false;
+    modoJugador = true;
+    juegoTerminado = false;
+    vidas = 3;
+    pistaUsada = false;
+    actualizarVidasUI();
+    document.getElementById("vidasContainer").style.display = "block";
+
+    let numero = Math.floor(Math.random() * paises.length);
+    paisSecreto = paises[numero].innerText;
+
+    mensaje.innerHTML = "🤫 Hay un país secreto. ¡Tienes 3 vidas!";
+    document.getElementById("paisElegido").innerHTML = "🌎 País secreto oculto";
+    
+    reiniciarRelojBase();
+    iniciarTiempo();
 });
 
+// =======================
+// SISTEMA DE PISTAS 💡
+// =======================
+document.getElementById("darPista").addEventListener("click", () => {
+    if (!modoJugador || juegoTerminado) {
+        playSound('error');
+        mensaje.innerHTML = "⚠️ Activa el Modo Un Jugador o Reto Diario para pedir una pista.";
+        return;
+    }
+    if (pistaUsada) {
+        playSound('error');
+        mensaje.innerHTML = "⚠️ Ya usaste tu pista en esta partida.";
+        return;
+    }
 
+    pistaUsada = true;
+    playSound('hint');
 
-let numero = Math.floor(Math.random()*paises.length);
+    // Limpiar emojis o símbolos para mostrar la letra inicial
+    let nombreLimpio = paisSecreto.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ]/g, "").trim();
+    let primeraLetra = nombreLimpio.charAt(0).toUpperCase();
+    let longitud = nombreLimpio.length;
 
-
-paisSecreto = paises[numero].innerText;
-
-
-
-segundos=0;
-
-minutos=0;
-
-
-document.getElementById("tiempo").innerHTML=
-
-"Tiempo: 00:00";
-
-
-
-clearInterval(reloj);
-
-
-reloj=null;
-
-
-iniciado=false;
-
-paisSecreto = "";
-
-
-document.getElementById("paisElegido").innerHTML =
-"🌎 País seleccionado: Ninguno";
-
-
-document.getElementById("ventanaPais").style.display =
-"none";
-
-
-modoJugador = false;
-
-
-mensaje.innerHTML = "";
-
-
-clearInterval(reloj);
-
-reloj = null;
-
-segundos = 0;
-
-minutos = 0;
-
-iniciado = false;
-
-
-document.getElementById("tiempo").innerHTML =
-"Tiempo: 00:00";
+    mensaje.innerHTML = `💡 Pista: Empieza con la letra "<b>${primeraLetra}</b>" y tiene aprox. ${longitud} letras.`;
 });
 
-// Abrir ventana
-document.getElementById("elegirManual").addEventListener("click",()=>{
+// =======================
+// CLIC EN EL TABLERO
+// =======================
+paises.forEach(pais => {
+    pais.addEventListener("click", () => {
+        playSound('click');
 
-const lista=document.getElementById("listaPaises");
+        if (!modoJugador) {
+            pais.classList.toggle("descartado");
+            return;
+        }
 
-lista.innerHTML="";
+        if (juegoTerminado) return;
 
-paises.forEach(pais=>{
+        if (!iniciado) {
+            iniciarTiempo();
+        }
 
-let opcion=document.createElement("option");
+        if (pais.innerText === paisSecreto) {
+            // VICTORIA
+            juegoTerminado = true;
+            clearInterval(reloj);
+            playSound('win');
+            mensaje.innerHTML = "🎉 ¡Correcto! Era " + paisSecreto;
+            pais.classList.add("brillo");
 
-opcion.value=pais.innerText;
+            stats.partidas++;
+            stats.victorias++;
+            stats.racha++;
+            if (stats.racha > stats.mejorRacha) {
+                stats.mejorRacha = stats.racha;
+            }
 
-opcion.textContent=pais.innerText;
+            let tiempoTotalSegs = (minutos * 60) + segundos;
+            if (stats.mejorTiempo === null || tiempoTotalSegs < stats.mejorTiempo) {
+                stats.mejorTiempo = tiempoTotalSegs;
+            }
 
-lista.appendChild(opcion);
+            if (esRetoDiario) {
+                const hoy = getFechaMexico();
+                localStorage.setItem("retoDiario_completado_" + hoy, "true");
+            }
 
+            guardarStats();
+
+            let m = minutos < 10 ? "0" + minutos : minutos;
+            let s = segundos < 10 ? "0" + segundos : segundos;
+            mostrarModal("🏆 ¡Victoria!", "¡Adivinaste el país secreto!<br>Tiempo: " + m + ":" + s + "<br>Racha actual: " + stats.racha);
+
+        } else {
+            // ERROR / RESTAR VIDA
+            playSound('error');
+            pais.classList.add("descartado");
+            vidas--;
+            actualizarVidasUI();
+
+            if (vidas <= 0) {
+                // DERROTA
+                juegoTerminado = true;
+                clearInterval(reloj);
+                mensaje.innerHTML = "❌ ¡Game Over! Era " + paisSecreto;
+
+                stats.partidas++;
+                stats.derrotas++;
+                stats.racha = 0;
+                guardarStats();
+
+                if (esRetoDiario) {
+                    const hoy = getFechaMexico();
+                    localStorage.setItem("retoDiario_completado_" + hoy, "true");
+                }
+
+                mostrarModal("❌ ¡Derrota!", "Te quedaste sin vidas.<br>El país secreto era: <b>" + paisSecreto + "</b><br>Tu racha se ha reiniciado a 0.");
+            } else {
+                mensaje.innerHTML = "❌ No es ese país. Te quedan " + vidas + " vidas.";
+            }
+        }
+
+        setTimeout(() => {
+            pais.classList.remove("brillo");
+        }, 400);
+    });
 });
 
-document.getElementById("ventanaPais").style.display="block";
+// =======================
+// TEMPORIZADOR
+// =======================
+function iniciarTiempo() {
+    if (iniciado) return;
+    iniciado = true;
 
-});
+    reloj = setInterval(() => {
+        segundos++;
+        if (segundos == 60) {
+            segundos = 0;
+            minutos++;
+        }
 
+        let m = minutos < 10 ? "0" + minutos : minutos;
+        let s = segundos < 10 ? "0" + segundos : segundos;
 
-// Seleccionar país
-
-function seleccionarPais(){
-
-paisSecreto=document.getElementById("listaPaises").value;
-
-document.getElementById("paisElegido").innerHTML=
-"🌎 País elegido:<br><br>"+paisSecreto;
-
-document.getElementById("ventanaPais").style.display="none";
-
+        document.getElementById("tiempo").innerHTML = "Tiempo: " + m + ":" + s;
+    }, 1000);
 }
 
-
-// Cerrar ventana
-
-function cerrarVentana(){
-
-document.getElementById("ventanaPais").style.display="none";
-
+function reiniciarRelojBase() {
+    clearInterval(reloj);
+    reloj = null;
+    segundos = 0;
+    minutos = 0;
+    iniciado = false;
+    document.getElementById("tiempo").innerHTML = "Tiempo: 00:00";
 }
 
+// =======================
+// MODAL DE RESULTADO
+// =======================
+function mostrarModal(titulo, texto) {
+    document.getElementById("tituloResultado").innerHTML = titulo;
+    document.getElementById("textoResultado").innerHTML = texto;
+    document.getElementById("modalResultado").style.display = "block";
+}
+
+function cerrarModalResultado() {
+    playSound('click');
+    document.getElementById("modalResultado").style.display = "none";
+}
+
+// =======================
+// REINICIAR JUEGO MANUAL
+// =======================
+document.getElementById("reiniciar").addEventListener("click", () => {
+    playSound('click');
+    paises.forEach(pais => {
+        pais.classList.remove("descartado");
+        pais.classList.remove("brillo");
+    });
+
+    reiniciarRelojBase();
+    juegoTerminado = false;
+    modoJugador = false;
+    esRetoDiario = false;
+    paisSecreto = "";
+    pistaUsada = false;
+
+    document.getElementById("vidasContainer").style.display = "none";
+    document.getElementById("paisElegido").innerHTML = "🌎 País seleccionado: Ninguno";
+    document.getElementById("ventanaPais").style.display = "none";
+    document.getElementById("modalResultado").style.display = "none";
+    mensaje.innerHTML = "Modo libre";
+});
 </script>
+
 </body>
+</htm
